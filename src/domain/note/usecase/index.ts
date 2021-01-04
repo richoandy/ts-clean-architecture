@@ -10,8 +10,10 @@ export default class NoteUsecase implements INoteUsecase {
 
     async create (note: INote): Promise<INote> {
         const trx = await TransactionManager.start();
+
         try {
             const result = await this.noteRepo.create(trx, note);
+
             await TransactionManager.commit(trx);
             return result;
         } catch (error) {
