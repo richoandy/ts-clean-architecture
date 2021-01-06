@@ -6,7 +6,7 @@ export default class NoteUsecase implements INoteUsecase {
     private noteRepo: INoteRepo;
     private transactionManager: ITransactionManager<QueryRunner>;
 
-    constructor (transactionManager: ITransactionManager<QueryRunner>, noteRepo: INoteRepo) {
+    constructor (transactionManager: ITransactionManager<any>, noteRepo: INoteRepo) {
         this.transactionManager = transactionManager;
         this.noteRepo = noteRepo;
     }
