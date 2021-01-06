@@ -4,7 +4,7 @@ import { INote, INoteUsecase, INoteRepo } from '../entity';
 
 export default class NoteUsecase implements INoteUsecase {
     private noteRepo: INoteRepo;
-    private transactionManager: ITransactionManager<QueryRunner>;
+    private transactionManager: ITransactionManager<any>;
 
     constructor (transactionManager: ITransactionManager<any>, noteRepo: INoteRepo) {
         this.transactionManager = transactionManager;
