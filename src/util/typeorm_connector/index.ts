@@ -24,7 +24,7 @@ export default class TypeormLoader {
         return await createConnection({
             type: 'mysql',
             entities: [
-                'src/domain/**/repository/*.entity.ts',
+                `./src/domain/**/repository/*.model.ts`,
             ],
             ...this.dbConfig,
         });

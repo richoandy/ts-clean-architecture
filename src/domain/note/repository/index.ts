@@ -1,6 +1,6 @@
 import { createConnection, QueryRunner } from 'typeorm';
 import { INoteRepo, INote } from '../entity';
-import Note from './note.entity';
+import Note from './note.model';
 
 export default class NoteRepo implements INoteRepo {
     async create (trx: QueryRunner, payload: INote): Promise<INote> {
