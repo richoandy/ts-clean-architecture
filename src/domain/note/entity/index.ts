@@ -1,5 +1,5 @@
 import { QueryRunner } from 'typeorm';
-import { ITransactionManager } from 'util/transaction_manager';
+import { ITransactionManager } from 'util/transaction_manager/interface';
 
 export interface INote {
     id?: number;
