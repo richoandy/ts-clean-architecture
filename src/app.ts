@@ -2,7 +2,10 @@ import 'reflect-metadata'; // dependency for typeORM
 
 import * as express from 'express';
 import TypeormConnector from './util/typeorm_connector';
+
 import { IHttpDelivery } from './util/delivery/http';
+import TransactionManager from './util/transaction_manager';
+import { ITransactionManager } from './util/transaction_manager/interface';
 
 // Note Domain
 import { INote, INoteUsecase, INoteRepo } from './domain/note/entity';
@@ -31,14 +34,19 @@ const connection = new TypeormConnector({
     await connection.initConnection();
 })();
 
+// prepare TransactionManager for mysql database
+const transactionManager = new TransactionManager();
+
 // prepare express
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// load delivery (HTTP) for Note
+// load Note usecase
 const noteRepo = new NoteRepo();
-const noteUsecase = new NoteUsecase(noteRepo);
+const noteUsecase = new NoteUsecase(transactionManager, noteRepo);
+
+// load Note HTTP delivery
 const noteHttpDelivery = new NoteHttpDelivery(app, noteUsecase);
 noteHttpDelivery.loadHttpDelivery();
 

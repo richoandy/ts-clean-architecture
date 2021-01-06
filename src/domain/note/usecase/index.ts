@@ -1,23 +1,26 @@
+import { QueryRunner } from 'typeorm';
+import { ITransactionManager } from 'util/transaction_manager/interface';
 import { INote, INoteUsecase, INoteRepo } from '../entity';
-import TransactionManager from '../../../util/transaction_manager';
 
 export default class NoteUsecase implements INoteUsecase {
-    private noteRepo;
+    private noteRepo: INoteRepo;
+    private transactionManager: ITransactionManager<QueryRunner>;
 
-    constructor (noteRepo: INoteRepo) {
+    constructor (transactionManager: ITransactionManager<QueryRunner>, noteRepo: INoteRepo) {
+        this.transactionManager = transactionManager;
         this.noteRepo = noteRepo;
     }
 
     async create (note: INote): Promise<INote> {
-        const trx = await TransactionManager.start();
+        const trx = await this.transactionManager.start();
 
         try {
             const result = await this.noteRepo.create(trx, note);
 
-            await TransactionManager.commit(trx);
+            await this.transactionManager.commit(trx);
             return result;
         } catch (error) {
-            await TransactionManager.rollback(trx);
+            await this.transactionManager.rollback(trx);
             throw error;
         }
     }
