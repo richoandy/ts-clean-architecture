@@ -1,15 +1,13 @@
 import 'reflect-metadata'; // dependency for typeORM
+
+// import config
 import * as dotenv from 'dotenv';
+dotenv.config();
+import config from './config';
 
 import * as express from 'express';
 import TypeormConnector from './util/typeorm_connector';
-
-import { IHttpDelivery } from './util/delivery/http';
 import TransactionManager from './util/transaction_manager';
-
-// import config
-dotenv.config();
-import config from './config';
 
 // Note Domain
 import NoteRepo from './domain/note/repository';
