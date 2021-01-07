@@ -5,7 +5,6 @@
 - usecase should not interact with any 3rd party library dependencies
 - "only test code that I write"
 
-
 **stack**:
 - Web Framework: *Express (@types/express)*
 - ORM: *TypeORM*
