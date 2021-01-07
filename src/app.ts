@@ -1,4 +1,5 @@
 import 'reflect-metadata'; // dependency for typeORM
+import * as dotenv from 'dotenv';
 
 import * as express from 'express';
 import TypeormConnector from './util/typeorm_connector';
@@ -7,27 +8,23 @@ import { IHttpDelivery } from './util/delivery/http';
 import TransactionManager from './util/transaction_manager';
 import { ITransactionManager } from './util/transaction_manager/interface';
 
+// import config
+dotenv.config();
+import config from './config';
+
 // Note Domain
 import { INote, INoteUsecase, INoteRepo } from './domain/note/entity';
 import NoteRepo from './domain/note/repository';
 import NoteUsecase from './domain/note/usecase';
 import NoteHttpDelivery from './domain/note/delivery/http';
 
-// load env
-const HOST = 'localhost';
-const DATABASE = 'ts-clean-architecture';
-const USERNAME = 'root';
-const PASSWORD = '';
-const DATABASE_PORT = 3306;
-const PORT = 3000;
-
 // initialize typeORM connection to mysql database
 const connection = new TypeormConnector({
-    host: HOST,
-    port: DATABASE_PORT,
-    username: USERNAME,
-    password: PASSWORD,
-    database: DATABASE,
+    host: config.HOST,
+    port: parseInt(config.DATABASE_PORT, 10),
+    username: config.USERNAME,
+    password: config.PASSWORD,
+    database: config.DATABASE,
 });
 
 (async () => {
@@ -51,4 +48,4 @@ const noteHttpDelivery = new NoteHttpDelivery(app, noteUsecase);
 noteHttpDelivery.loadHttpDelivery();
 
 // start express server
-app.listen(PORT);
+app.listen(parseInt(config.PORT, 10));
