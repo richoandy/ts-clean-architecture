@@ -6,14 +6,12 @@ import TypeormConnector from './util/typeorm_connector';
 
 import { IHttpDelivery } from './util/delivery/http';
 import TransactionManager from './util/transaction_manager';
-import { ITransactionManager } from './util/transaction_manager/interface';
 
 // import config
 dotenv.config();
 import config from './config';
 
 // Note Domain
-import { INote, INoteUsecase, INoteRepo } from './domain/note/entity';
 import NoteRepo from './domain/note/repository';
 import NoteUsecase from './domain/note/usecase';
 import NoteHttpDelivery from './domain/note/delivery/http';
