@@ -1,4 +1,4 @@
-# Ts-Clean-Architecture #
+# TS-Clean-Architecture #
 ## Very simple demonstration on Clean Architecture for Typescript: ##
 - Object Oriented
 - slim repository, slim delivery, fat usecase
