@@ -3,7 +3,7 @@
  * docs: https://github.com/typeorm/typeorm
  */
 
-import { createConnection, Connection } from 'typeorm';
+import { Connection, createConnection, getConnection } from 'typeorm';
 
 type dbConfigType = {
     host: string,
@@ -13,20 +13,24 @@ type dbConfigType = {
     password: string,
 };
 
-export default class TypeormLoader {
+export default class TypeormConnector {
     private dbConfig: dbConfigType;
 
     constructor (dbConfig: dbConfigType) {
         this.dbConfig = dbConfig;
     }
 
-    async initConnection (): Promise<Connection>  {
-        return await createConnection({
+    async initConnection (): Promise<void>  {
+        await createConnection({
             type: 'mysql',
             entities: [
-                `./src/domain/**/repository/*.model.ts`,
+                `./src/domain/**/repository/model.ts`,
             ],
             ...this.dbConfig,
         });
+    }
+
+    async getConnection (): Promise<Connection> {
+        return getConnection();
     }
 }

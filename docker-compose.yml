@@ -1,0 +1,16 @@
+version: "3.7"
+services:
+  my-postgres:
+    image: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ${VOLUME}:/var/lib/mysql/data
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: xendit-go-live-service
+  my-redis:
+    image: redis
+    ports:
+    - "6379:6379"

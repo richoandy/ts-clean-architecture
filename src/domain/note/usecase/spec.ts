@@ -1,7 +1,7 @@
 import { QueryRunner } from 'typeorm';
 import { INote, INoteRepo } from '../entity';
 import TransactionManager from '../../../mock/transaction_manager.mock';
-import NoteUsecase from '../usecase';
+import NoteUsecase from '.';
 
 const noteRepoMock: INoteRepo = {
     create: async (trx: QueryRunner, note: INote): Promise<INote> => {
