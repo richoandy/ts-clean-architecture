@@ -13,18 +13,18 @@ export default class TransactionManager implements ITransactionManager<QueryRunn
         this.connection = connection;
     }
 
-    async start () : Promise <QueryRunner> {
+    async start () : Promise<QueryRunner> {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.startTransaction();
     return queryRunner;
     }
 
-    async commit (queryRunner: QueryRunner) : Promise <void> {
+    async commit (queryRunner: QueryRunner) : Promise<void> {
     await queryRunner.commitTransaction();
     await queryRunner.release();
     }
 
-    async rollback (queryRunner: QueryRunner) : Promise < void > {
+    async rollback (queryRunner: QueryRunner) : Promise<void> {
     await queryRunner.rollbackTransaction();
     await queryRunner.release();
     }

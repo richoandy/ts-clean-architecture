@@ -13,8 +13,11 @@ export default class CountryHttpDelivery implements IHttpDelivery {
 
     async loadHttpDelivery (): Promise<void> {
         this.app.post('/country', async (req, res) => {
-            console.log('receiving ...');
             res.json(await this.countryUsecase.create(req.body));
+        });
+
+        this.app.get('/country', async (req, res) => {
+            res.json(await this.countryUsecase.list());
         });
     }
 }

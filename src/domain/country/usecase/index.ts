@@ -1,18 +1,20 @@
 import { count } from 'console';
 import { ICacheManager } from 'util/cache_manager/interface';
 import { ITransactionManager } from 'util/transaction_manager/interface';
-import { ICountry, ICountryUsecase, ICountryRepo } from '../entity';
+import { ICountry, ICountryUsecase, ICountryRepo, CONSTANT } from '../entity';
 
 export default class CountryUsecase implements ICountryUsecase {
     private countryRepo: ICountryRepo;
     private transactionManager: ITransactionManager<any>;
+    private cacheManager: ICacheManager<any>;
 
     constructor (
+        countryRepo: ICountryRepo,
         transactionManager: ITransactionManager<any>,
-        cacheManager: ICacheManager<any>,
-        countryRepo: ICountryRepo) {
-        this.transactionManager = transactionManager;
+        cacheManager: ICacheManager<any>) {
         this.countryRepo = countryRepo;
+        this.transactionManager = transactionManager;
+        this.cacheManager = cacheManager;
     }
 
     async create (country: ICountry): Promise<ICountry> {
@@ -21,10 +23,34 @@ export default class CountryUsecase implements ICountryUsecase {
         try {
             const result = await this.countryRepo.create(trx, country);
 
+            await this.cacheManager.targetFlush(CONSTANT.COUNTRY);
             await this.transactionManager.commit(trx);
             return result;
         } catch (error) {
-            console.log(error);
+            await this.transactionManager.rollback(trx);
+            throw error;
+        }
+    }
+
+    async list (): Promise<ICountry[]> {
+        const trx = await this.transactionManager.start();
+
+        const cacheKey = `${CONSTANT.COUNTRY}+${this.list.name}`;
+
+        try {
+            let result: ICountry[] = await this.cacheManager.get<ICountry[]>(cacheKey);
+
+            if (!result) {
+                result = await this.countryRepo.list(trx);
+
+                await this.cacheManager.set<ICountry[]>(
+                    cacheKey,
+                    result,
+                );
+            }
+
+            return result;
+        } catch (error) {
             await this.transactionManager.rollback(trx);
             throw error;
         }

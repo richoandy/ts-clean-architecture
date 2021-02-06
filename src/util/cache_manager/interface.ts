@@ -1,5 +1,7 @@
 export interface ICacheManager<t> {
-    set (): Promise<void>;
-    get (): Promise<void>;
-    flush (): Promise<void>;
+    set<y> (key: string, value: y): Promise<void>;
+    get<u> (key: string): Promise<u>;
+    scan (key: string): Promise<string[]>;
+    flush (): Promise<any>;
+    targetFlush (keys: string): Promise<void>;
 }
