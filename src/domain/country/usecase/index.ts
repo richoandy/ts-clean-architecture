@@ -38,16 +38,10 @@ export default class CountryUsecase implements ICountryUsecase {
         const cacheKey = `${CONSTANT.COUNTRY}+${this.list.name}`;
 
         try {
-            let result: ICountry[] = await this.cacheManager.get<ICountry[]>(cacheKey);
-
-            if (!result) {
-                result = await this.countryRepo.list(trx);
-
-                await this.cacheManager.set<ICountry[]>(
-                    cacheKey,
-                    result,
-                );
-            }
+            const result: ICountry[] = await this.cacheManager.inspect <ICountry[]>(
+                cacheKey,
+                this.countryRepo.list(trx),
+            );
 
             return result;
         } catch (error) {

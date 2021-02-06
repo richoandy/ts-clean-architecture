@@ -13,6 +13,19 @@ export default class CacheManager implements ICacheManager<RedisClient> {
         this.cache = client;
     }
 
+    async inspect<t> (key: string, repo: any): Promise<t> {
+        let result: t;
+
+        result = await this.get<t>(key);
+
+        if (!result) {
+            result = await repo;
+            await this.set<t>(key, result);
+        }
+
+        return result;
+    }
+
     async set<t> (key: string, value: t): Promise<void> {
         const asyncSet = promisify(this.cache.set).bind(this.cache);
 

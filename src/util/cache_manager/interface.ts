@@ -4,4 +4,5 @@ export interface ICacheManager<t> {
     scan (key: string): Promise<string[]>;
     flush (): Promise<any>;
     targetFlush (keys: string): Promise<void>;
+    inspect<i> (key: string, repo: any): Promise<i>;
 }
